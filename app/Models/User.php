@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Notifications\NewUserNotification;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\Gate;
  * @property timestamp $created_at created at
  * @property timestamp $updated_at updated at
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, Notifiable;
 

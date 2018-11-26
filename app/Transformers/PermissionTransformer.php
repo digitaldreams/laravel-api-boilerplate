@@ -26,8 +26,6 @@ class PermissionTransformer extends BaseTransformer
             'id' => (int)$permission->id,
             'method' => $permission->method,
             'class' => $permission->class,
-            'updated_at' => $permission->updated_at->format('Y-m-d H:i:s'),
-            'created_at' => $permission->created_at->format('Y-m-d H:i:s'),
         ];
         return $this->filterFields($data);
     }
