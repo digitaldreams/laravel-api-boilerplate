@@ -50,7 +50,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'address',
         'phone',
         'status',
-        'role_id'
     ];
 
 
@@ -90,7 +89,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function scopeUsers($query)
     {
-        return $query->whereHas('role', function ($q) {
+        return $query->whereHas('roles', function ($q) {
             $q->where('slug', Role::USER);
         });
     }

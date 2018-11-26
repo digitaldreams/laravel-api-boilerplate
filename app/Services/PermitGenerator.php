@@ -32,6 +32,7 @@ class PermitGenerator
      */
     public function process()
     {
+        $arr = [];
         foreach ($this->policies as $model => $policy) {
             if (class_exists($policy)) {
                 $cls = new ClassInspector($policy);
@@ -41,7 +42,7 @@ class PermitGenerator
                 $methods = $cls->reflection->getMethods(ReflectionMethod::IS_PUBLIC);
                 foreach ($methods as $method) {
                     if (!in_array($method->getName(), $guardedMethod)) {
-                        $this->save($method, $cls->reflection);
+                        $arr[] = $this->save($method, $cls->reflection);
                     }
                 }
             }

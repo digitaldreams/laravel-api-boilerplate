@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Tuhin
- * Date: 8/14/2018
- * Time: 6:00 PM
- */
 
 namespace App\Contracts;
 
