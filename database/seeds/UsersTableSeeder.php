@@ -23,8 +23,8 @@ class UsersTableSeeder extends Seeder
             'status' => User::STATUS_ACTIVE,
         ]);
         User::create([
-            'first_name' => 'Rose',
-            'last_name' => 'Michele',
+            'first_name' => 'Demo',
+            'last_name' => 'User',
             'email' => 'rosemichele12@gmail.com',
             'password' => bcrypt('123456'),
             'address' => 'Dhaka, Bangladesh',
