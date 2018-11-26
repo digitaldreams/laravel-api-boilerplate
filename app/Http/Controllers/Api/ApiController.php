@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use League\Fractal\Manager;
+use Dingo\Api\Routing\Helpers;
 
 /**
  * Class ApiController
@@ -14,6 +15,8 @@ use League\Fractal\Manager;
  */
 class ApiController extends Controller
 {
+    use Helpers;
+
     public function __construct()
     {
         if (isset($_GET['include']) && !empty($_GET['include'])) {
