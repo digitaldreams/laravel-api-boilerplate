@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Loan;
 use App\Models\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -9,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\Passport;
 
 
-class UserControllerTest extends TestCase
+class LoanControllerTest extends TestCase
 {
 
     /**
@@ -23,7 +24,7 @@ class UserControllerTest extends TestCase
         Passport::actingAs(
             $user, ['*']
         );
-        $response = $this->get('/api/users');
+        $response = $this->get('/api/loans');
         $response->assertStatus(200);
     }
 
@@ -38,10 +39,9 @@ class UserControllerTest extends TestCase
         Passport::actingAs(
             $user, ['*']
         );
-        $user2 = factory(User::class)->make()->toArray();
-        $user2['password_confirmation'] = $user2['password'] = 123456;
+        $loan = factory(Loan::class)->make()->toArray();
 
-        $response = $this->post('/api/users', $user2);
+        $response = $this->post('/api/loans', $loan);
         $response->assertStatus(200);
     }
 
@@ -56,7 +56,8 @@ class UserControllerTest extends TestCase
         Passport::actingAs(
             $user, ['*']
         );
-        $response = $this->get('/api/users/' . $user->id);
+        $loan = factory(Loan::class)->create();
+        $response = $this->get('/api/loans/' . $loan->id);
 
         $response->assertStatus(200);
     }
@@ -72,9 +73,9 @@ class UserControllerTest extends TestCase
         Passport::actingAs(
             $user, ['*']
         );
-        $user2 = factory(User::class)->create();
+        $loan = factory(Loan::class)->create();
 
-        $response = $this->put('/api/users/' . $user2->id, $user2->toArray());
+        $response = $this->put('/api/loans/' . $loan->id, $loan->toArray());
 
         $response->assertStatus(200);
     }
@@ -86,12 +87,13 @@ class UserControllerTest extends TestCase
      */
     public function testDestroyTest()
     {
-        $user2 = factory(User::class)->create();
         $user = User::first();
         Passport::actingAs(
             $user, ['*']
         );
-        $response = $this->delete('/api/users/' . $user2->id);
+        $loan = factory(Loan::class)->create();
+
+        $response = $this->delete('/api/loans/' . $loan->id);
 
         $response->assertStatus(200);
     }
