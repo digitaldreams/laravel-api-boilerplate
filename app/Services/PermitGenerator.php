@@ -47,6 +47,7 @@ class PermitGenerator
                 }
             }
         }
+        return $arr;
     }
 
     /**

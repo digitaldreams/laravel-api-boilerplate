@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\Roles;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Dingo\Api\Http\FormRequest;
 
 class Detach extends FormRequest
 {
@@ -13,10 +13,7 @@ class Detach extends FormRequest
      */
     public function authorize()
     {
-        //Will use Policy here when working with Authorization
-
-        return true;
-
+        return auth()->user()->can('detach', $this->route('role'));
     }
 
     /**

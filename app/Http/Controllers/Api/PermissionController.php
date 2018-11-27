@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\Api\Permissions\Attach;
 use App\Http\Requests\Api\Permissions\Destroy;
 use App\Http\Requests\Api\Permissions\Detach;
+use App\Http\Requests\Api\Permissions\Index;
 use App\Http\Requests\Api\Permissions\Store;
 use App\Http\Requests\Api\Permissions\Sync;
 use App\Http\Requests\Api\Permissions\Update;
@@ -13,19 +14,12 @@ use App\Transformers\PermissionTransformer;
 use Illuminate\Http\Request;
 use App\Models\Permission;
 
-/**
- * RESTful Permission Controller
- *
- * @Resource("Permissions", uri="/permissions")
- */
 class PermissionController extends ApiController
 {
 
-    public function index(Request $request)
+    public function index(Index $request)
     {
         $permissions = Permission::search($request->get('q'))->paginate($request->get('limit', 10));
-
-        $this->attachRelation();
 
         if (!$permissions->isEmpty()) {
             return $this->response->paginator($permissions, new PermissionTransformer(), $request->all());
@@ -47,20 +41,13 @@ class PermissionController extends ApiController
         }
     }
 
-    public function show($id)
+    public function show(Show $request, Permission $permission)
     {
-        $permission = Permission::findOrFail($id);
-
-        //Attach Relation to the Transformer
-        $this->attachRelation();
-
         return $this->response->item($permission, new PermissionTransformer());
-
     }
 
-    public function update(Update $request, $id)
+    public function update(Update $request, Permission $permission)
     {
-        $permission = Permission::findOrFail($id);;
         if ($permission->fill($request->all())->save()) {
             if ($request->has('roles') && is_array($request->get('roles'))) {
                 $permission->roles()->sync($request->get('roles', []));
@@ -71,9 +58,9 @@ class PermissionController extends ApiController
         }
     }
 
-    public function destroy(Destroy $request, $id)
+    public function destroy(Destroy $request, Permission $permission)
     {
-        if (Permission::destroy($id)) {
+        if ($permission->delete()) {
             return $this->response->array([
                 'message' => 'Permission successfully deleted',
                 'status_code' => 200
@@ -83,11 +70,9 @@ class PermissionController extends ApiController
         }
     }
 
-    public function roleSync(Sync $request, $id)
+    public function roleSync(Sync $request, Permission $permission)
     {
-        $permission = Permission::findOrFail($id);
         $permission->roles()->sync($request->get('roles', []));
-
         return $this->response->array([
             'message' => 'Roles successfully synchronized',
             'role_ids' => $permission->roles()->pluck('id')->toArray(),
@@ -96,29 +81,23 @@ class PermissionController extends ApiController
 
     }
 
-    public function roleAttach(Attach $request, $id)
+    public function roleAttach(Attach $request, Permission $permission)
     {
-        $permission = Permission::findOrFail($id);
         $permission->roles()->syncWithoutDetaching($request->get('roles', []));
-
         return $this->response->array([
             'message' => 'Roles successfully attached',
             'role_ids' => $permission->roles()->pluck('id')->toArray(),
             'status_code' => 200
         ]);
-
     }
 
-    public function roleDetach(Detach $request, $id)
+    public function roleDetach(Detach $request, Permission $permission)
     {
-        $permission = Permission::findOrFail($id);
         $permission->roles()->detach($request->get('roles', []));
-
         return $this->response->array([
             'message' => 'Roles successfully detached',
             'role_ids' => $permission->roles()->pluck('id')->toArray(),
             'status_code' => 200
         ]);
-
     }
 }

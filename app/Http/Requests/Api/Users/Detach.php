@@ -2,8 +2,7 @@
 
 namespace App\Http\Requests\Api\Users;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Models\User;
+use Dingo\Api\Http\FormRequest;
 
 class Detach extends FormRequest
 {

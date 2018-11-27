@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\Permissions;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Dingo\Api\Http\FormRequest;
 
 class Update extends FormRequest
 {
@@ -13,9 +13,7 @@ class Update extends FormRequest
      */
     public function authorize()
     {
-        //Will use Policy here when working with Authorization
-
-        return true;
+        return auth()->user()->can('update', $this->route('permission'));
     }
 
     /**

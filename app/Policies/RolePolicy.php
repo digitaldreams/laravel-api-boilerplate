@@ -82,4 +82,40 @@ class RolePolicy
     {
         return false;
     }
+
+    /**
+     * Can able to sync Permission
+     *
+     * @param User $currentUser
+     * @param Role $role
+     * @return bool
+     */
+    public function sync(User $currentUser, Role $role)
+    {
+        return false;
+    }
+
+    /**
+     * Can able to sync Permission
+     *
+     * @param User $currentUser
+     * @param Role $role
+     * @return bool
+     */
+    public function attach(User $currentUser, Role $role)
+    {
+        return false;
+    }
+
+    /**
+     * Can able to sync Permission
+     *
+     * @param User $currentUser
+     * @param Role $role
+     * @return bool
+     */
+    public function detach(User $currentUser, Role $role)
+    {
+        return false;
+    }
 }

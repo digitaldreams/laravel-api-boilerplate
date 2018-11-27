@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\Users\Destroy;
+use App\Http\Requests\Api\Users\Index;
 use App\Http\Requests\Api\Users\Store;
 use App\Http\Requests\Api\Users\Update;
 use App\Http\Requests\Api\Users\Show;
@@ -21,7 +22,7 @@ use App\Models\User;
 class UserController extends ApiController
 {
 
-    public function index(Request $request)
+    public function index(Index $request)
     {
         $users = User::q($request->get('q'))->paginate($request->get('limit', 10));
         if (!$users->isEmpty()) {
@@ -46,34 +47,27 @@ class UserController extends ApiController
     }
 
 
-    public function show($id)
+    public function show(Show $request, User $user)
     {
-        $user = User::findOrFail($id);
         return $this->response->item($user, new UserTransformer());
     }
 
-    public function update(Update $request, $id)
+    public function update(Update $request, User $user)
     {
-        $user = User::findOrFail($id);
         $user->fill($request->all());
-
         if (!empty($request->get('password'))) {
             $user->password = bcrypt($request->get('password'));
         }
-
         if ($user->save()) {
-            if ($request->has('groups') && is_array($request->get('groups'))) {
-                $user->groups()->sync($request->get('groups', []));
-            }
             return $this->response->item($user, new UserTransformer());
         } else {
             return $this->response->error('Unable to uodate user', 403);
         }
     }
 
-    public function destroy(Destroy $request, $id)
+    public function destroy(Destroy $request, User $user)
     {
-        if (User::destroy($id)) {
+        if ($user->delete()) {
             return $this->response->array([
                 'message' => 'User successfully deleted',
                 'status_code' => 200
@@ -83,9 +77,8 @@ class UserController extends ApiController
         }
     }
 
-    public function sync(Sync $request, $id)
+    public function sync(Sync $request, User $user)
     {
-        $user = User::findOrFail($id);
         $modelQuery = ($request->get('type') == 'team') ? $user->teams() : $user->roles();
         $modelQuery->sync($request->get('ids', []));
         return $this->response->array([
@@ -95,10 +88,9 @@ class UserController extends ApiController
         ]);
     }
 
-    public function attach(Attach $request, $id)
+    public function attach(Attach $request, User $user)
     {
-        $user = User::findOrFail($id);
-        $modelQuery = ($request->get('type') == 'team') ? $user->teams() : $user->roles();
+        $modelQuery = $user->roles();
         $modelQuery->syncWithoutDetaching($request->get('ids', []));
 
         return $this->response->array([
@@ -106,16 +98,12 @@ class UserController extends ApiController
             'ids' => $modelQuery->select(['id'])->pluck('id')->toArray(),
             'status_code' => 200
         ]);
-
     }
 
-    public function detach(Detach $request, $id)
+    public function detach(Detach $request, User $user)
     {
-        $user = User::findOrFail($id);
         $modelQuery = $user->roles();
-
         $user->roles()->detach($request->get('ids', []));
-
         return $this->response->array([
             'message' => 'Roles  successfully detached',
             'ids' => $modelQuery->select(['id'])->pluck('id')->toArray(),

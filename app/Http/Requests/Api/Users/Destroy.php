@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\Users;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Dingo\Api\Http\FormRequest;
 
 class Destroy extends FormRequest
 {
@@ -15,7 +15,7 @@ class Destroy extends FormRequest
     {
         //Will use Policy here when working with Authorization
 
-        return true;
+        return auth()->user()->can('destroy', $this->route('user'));
     }
 
     /**

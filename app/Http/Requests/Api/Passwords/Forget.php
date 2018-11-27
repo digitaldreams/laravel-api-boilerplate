@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\Passwords;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Dingo\Api\Http\FormRequest;
 
 class Forget extends FormRequest
 {

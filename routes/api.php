@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 $router = app('Dingo\Api\Routing\Router');
 $router->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function ($api) {
-    $api->group(['middleware' => 'auth:api'], function ($api) {
+    $api->group(['middleware' => ['auth:api', 'bindings']], function ($api) {
 
         $api->resource('users', 'UserController');
 

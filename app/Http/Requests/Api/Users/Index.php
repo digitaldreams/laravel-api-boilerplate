@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Api\Roles;
+namespace App\Http\Requests\Api\Users;
 
+use App\Models\User;
 use Dingo\Api\Http\FormRequest;
 
-class Update extends FormRequest
+class Index extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,7 @@ class Update extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->can('update', $this->route('role'));
+        return auth()->user()->can('index', User::class);
     }
 
     /**
@@ -24,10 +25,6 @@ class Update extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:250',
-            'slug' => 'alpha_num|max:250|unique:roles,slug,' . $this->route('id'),
-            'permissions.*' => 'exists:permissions,id'
         ];
     }
-
 }

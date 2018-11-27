@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\Permissions;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Dingo\Api\Http\FormRequest;
 
 class Store extends FormRequest
 {

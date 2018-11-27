@@ -20,20 +20,8 @@ class UserPolicy
         if ($user->isSuperAdmin()) {
             return true;
         }
-
     }
 
-    /**
-     * Can message to user.
-     *
-     * @param User $currentUser
-     * @param User $user
-     * @return bool
-     */
-    public function message(User $currentUser, User $user)
-    {
-        return false;
-    }
 
     /**
      * Show all Users

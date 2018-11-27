@@ -24,9 +24,6 @@ class RoleController extends ApiController
     public function index(Request $request)
     {
         $roles = Role::q($request->get('q'))->paginate($request->get('limit', 10));
-
-        $this->attachRelation();
-
         if (!$roles->isEmpty()) {
             return $this->response->paginator($roles, new RoleTransformer(), $request->all());
         } else {
@@ -48,15 +45,13 @@ class RoleController extends ApiController
         }
     }
 
-    public function show(Show $request, $id)
+    public function show(Show $request, Role $role)
     {
-        $role = Role::findOrFail($id);
         return $this->response->item($role, new RoleTransformer());
     }
 
-    public function update(Update $request, $id)
+    public function update(Update $request, Role $role)
     {
-        $role = Role::findOrFail($id);
         if ($role->fill($request->all())->save()) {
             if ($request->has('permissions') && is_array($request->get('permissions'))) {
                 $role->permissions()->sync($request->get('permissions', []));
@@ -67,9 +62,9 @@ class RoleController extends ApiController
         }
     }
 
-    public function destroy(Destroy $request, $id)
+    public function destroy(Destroy $request, Role $role)
     {
-        if (Role::destroy($id)) {
+        if ($role->delete()) {
             return $this->response->array([
                 'message' => 'Role successfully deleted',
                 'status_code' => 200
@@ -79,9 +74,8 @@ class RoleController extends ApiController
         }
     }
 
-    public function permissionSync(Sync $request, $id)
+    public function permissionSync(Sync $request, Role $role)
     {
-        $role = Role::findOrFail($id);
         $role->permissions()->sync($request->get('permissions', []));
 
         return $this->response->array([
@@ -91,9 +85,8 @@ class RoleController extends ApiController
         ]);
     }
 
-    public function permissionAttach(Attach $request, $id)
+    public function permissionAttach(Attach $request, Role $role)
     {
-        $role = Role::findOrFail($id);
         $role->permissions()->syncWithoutDetaching($request->get('permissions', []));
 
         return $this->response->array([
@@ -104,9 +97,8 @@ class RoleController extends ApiController
 
     }
 
-    public function permissionDetach(Detach $request, $id)
+    public function permissionDetach(Detach $request, Role $role)
     {
-        $role = Role::findOrFail($id);
         $role->permissions()->detach($request->get('permissions', []));
 
         return $this->response->array([

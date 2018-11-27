@@ -152,14 +152,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return (bool)$this->roles()->where('slug', $role)->count();
     }
 
-    /**
-     * Shortcut to hasRole Client
-     * @return bool
-     */
-    public function isClient()
-    {
-        return $this->hasRole(Role::CLIENT);
-    }
 
     /**
      * Shortcut to hasRole Super Admin

@@ -23,12 +23,9 @@ class RegisterController extends ApiController
         if (in_array($request->get('role'), config('permit.adminRoles', []))) {
             return $this->response->errorForbidden('Role ' . $request->get('role') . ' is protected. You are not allowed to claim this role');
         }
-        $role = Role::slug($request->get('role', Role::USER))->select(['id'])->first();
-
+        $roles = Role::slug($request->get('role', Role::USER))->select(['id'])->get();
         if ($user->save()) {
-            if ($role) {
-                $user->roles()->sync([$role->id]);
-            }
+            $user->roles()->sync($roles->pluck('id')->toArray());
             return $this->response->item($user, new UserTransformer());
         }
         return $this->response->errorBadRequest('Unable to register');

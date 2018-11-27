@@ -2,8 +2,7 @@
 
 namespace App\Http\Requests\Api\Passwords;
 
-use App\Models\User;
-use Illuminate\Foundation\Http\FormRequest;
+use Dingo\Api\Http\FormRequest;
 
 class Change extends FormRequest
 {

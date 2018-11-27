@@ -81,4 +81,38 @@ class PermissionPolicy
     {
         return false;
     }
+
+    /**
+     * Can able to sync Permission
+     *
+     * @param User $currentUser
+     * @param Permission $permission
+     * @return bool
+     */
+    public function sync(User $currentUser, Permission $permission)
+    {
+        return false;
+    }
+    /**
+     * Can able to sync Permission
+     *
+     * @param User $currentUser
+     * @param Permission $permission
+     * @return bool
+     */
+    public function attach(User $currentUser, Permission $permission)
+    {
+        return false;
+    }
+    /**
+     * Can able to sync Permission
+     *
+     * @param User $currentUser
+     * @param Permission $permission
+     * @return bool
+     */
+    public function detach(User $currentUser, Permission $permission)
+    {
+        return false;
+    }
 }

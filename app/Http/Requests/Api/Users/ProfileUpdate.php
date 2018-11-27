@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\Users;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Dingo\Api\Http\FormRequest;
 
 class ProfileUpdate extends FormRequest
 {

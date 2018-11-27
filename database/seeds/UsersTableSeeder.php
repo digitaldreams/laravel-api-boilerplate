@@ -14,7 +14,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        $admin = User::create([
             'first_name' => 'Tuhin',
             'last_name' => 'Bepari',
             'email' => 'digitaldreams40@gmail.com',
@@ -22,7 +22,9 @@ class UsersTableSeeder extends Seeder
             'address' => 'Mirpur, Dhaka',
             'status' => User::STATUS_ACTIVE,
         ]);
-        User::create([
+        $admin->roles()->sync(Role::all()->pluck('id')->toArray());
+
+        $user = User::create([
             'first_name' => 'Demo',
             'last_name' => 'User',
             'email' => 'rosemichele12@gmail.com',
@@ -30,5 +32,7 @@ class UsersTableSeeder extends Seeder
             'address' => 'Dhaka, Bangladesh',
             'status' => User::STATUS_ACTIVE,
         ]);
+        $user->roles()->sync(Role::slug(Role::USER)->pluck('id')->toArray());
+
     }
 }

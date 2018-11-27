@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\Permissions;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Dingo\Api\Http\FormRequest;
 
 class Sync extends FormRequest
 {
@@ -13,10 +13,7 @@ class Sync extends FormRequest
      */
     public function authorize()
     {
-        //Will use Policy here when working with Authorization
-
-        return true;
-     
+        return auth()->user()->can('sync', $this->route('permission'));
     }
 
     /**
