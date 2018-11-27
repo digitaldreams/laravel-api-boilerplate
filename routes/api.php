@@ -13,32 +13,36 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['middleware' => 'auth:api'], function () {
+$router = app('Dingo\Api\Routing\Router');
+$router->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function ($api) {
+    $api->group(['middleware' => 'auth:api'], function ($api) {
 
-    Route::apiResource('users', 'UserController');
+        $api->resource('users', 'UserController');
 
-    Route::group(['prefix' => 'permissions'], function ($api) {
-        Route::post('sync/{permission}', 'PermissionController@roleSync')->name('permissions.roles.sync');
-        Route::post('attach/{permission}', 'PermissionController@roleAttach')->name('permissions.roles.attach');
-        Route::post('detach/{permission}', 'PermissionController@roleDetach')->name('permissions.roles.detach');
+        $api->group(['prefix' => 'permissions'], function ($api) {
+            $api->post('sync/{permission}', 'PermissionController@roleSync')->name('permissions.roles.sync');
+            $api->post('attach/{permission}', 'PermissionController@roleAttach')->name('permissions.roles.attach');
+            $api->post('detach/{permission}', 'PermissionController@roleDetach')->name('permissions.roles.detach');
+        });
+        $api->resource('permissions', 'PermissionController');
+
+        $api->group(['prefix' => 'roles'], function ($api) {
+            $api->post('sync/{role}', 'RoleController@permissionSync')->name('roles.permissions.sync');
+            $api->post('attach/{role}', 'RoleController@permissionAttach')->name('roles.permissions.attach');
+            $api->post('detach/{role}', 'RoleController@permissionDetach')->name('roles.permissions.detach');
+        });
+        $api->resource('roles', 'RoleController');
+
+
+        $api->group(['prefix' => 'profile'], function ($api) {
+            $api->get('', ['as' => 'profile.show', 'uses' => 'ProfileController@show']);
+            $api->put('', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
+
+        });
+
+        $api->group(['prefix' => 'password'], function ($api) {
+            $api->post('change', ['as' => 'password.change', 'uses' => 'Auth\PasswordController@change']);
+        });
     });
-    Route::apiResource('permissions', 'PermissionController');
-
-    Route::group(['prefix' => 'roles'], function ($api) {
-        Route::post('sync/{role}', 'RoleController@permissionSync')->name('roles.permissions.sync');
-        Route::post('attach/{role}', 'RoleController@permissionAttach')->name('roles.permissions.attach');
-        Route::post('detach/{role}', 'RoleController@permissionDetach')->name('roles.permissions.detach');
-    });
-    Route::apiResource('roles', 'RoleController');
-
-
-    Route::group(['prefix' => 'profile'], function () {
-        Route::get('', ['as' => 'profile.show', 'uses' => 'ProfileController@show']);
-        Route::put('', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
-
-    });
-
-    Route::group(['prefix' => 'password'], function ($api) {
-        Route::post('change', ['as' => 'password.change', 'uses' => 'Auth\PasswordController@change']);
-    });
+    $api->post('auth/register', 'Auth\RegisterController@store')->name('auth.register');
 });

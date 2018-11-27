@@ -6,13 +6,13 @@
  * Time: 6:36 PM
  */
 
-namespace Permit\Http\Controllers\Api\Auth;
+namespace App\Http\Controllers\Api\Auth;
 
-use Permit\Http\Controllers\Api\ApiController;
-use Permit\Http\Requests\Api\Users\Register;
-use Permit\Models\Role;
-use Permit\Models\User;
-use Permit\Transformers\UserTransformer;
+use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\Api\Users\Register;
+use App\Models\Role;
+use App\Models\User;
+use App\Transformers\UserTransformer;
 
 class RegisterController extends ApiController
 {
