@@ -72,6 +72,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Role::class, 'user_role');
     }
 
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
+
+    public function repayments()
+    {
+        return $this->hasManyThrough(Repayment::class, Loan::class);
+    }
+
     /**
      * When trying to get name attribute then return getFullName function
      * @return string

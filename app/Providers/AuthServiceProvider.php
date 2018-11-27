@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Loan;
 use App\Models\Role;
+use App\Policies\LoanPolicy;
 use App\Policies\PermissionPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
@@ -23,6 +25,8 @@ class AuthServiceProvider extends ServiceProvider
         //  'App\Model' => 'App\Policies\ModelPolicy',
         User::class => UserPolicy::class,
         Role::class => RolePolicy::class,
+        Permission::class => PermissionPolicy::class,
+        Loan::class => LoanPolicy::class,
         Permission::class => PermissionPolicy::class
     ];
 

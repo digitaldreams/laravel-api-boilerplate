@@ -43,6 +43,8 @@ $router->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function ($a
         $api->group(['prefix' => 'password'], function ($api) {
             $api->post('change', ['as' => 'password.change', 'uses' => 'Auth\PasswordController@change']);
         });
+        $api->resource('loans', 'LoanController');
+
     });
     $api->post('auth/register', 'Auth\RegisterController@store')->name('auth.register');
 });

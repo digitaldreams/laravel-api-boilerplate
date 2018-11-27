@@ -18,11 +18,12 @@ class CreateLoansTable extends Migration
             $table->unsignedInteger('user_id');
             $table->double('amount')->default(0);
             $table->string('duration', 20)->nullable();
-            $table->double('interest_rate', 4, 4);
+            $table->double('interest_rate');
             $table->double('arrangement_fee')->default(0);
             //paid, settled, pending
-            $table->string('status', 20)->nullable();
+            $table->string('status', 20)->default('pending');
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

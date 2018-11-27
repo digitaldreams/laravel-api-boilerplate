@@ -19,6 +19,7 @@ class CreateRepaymentsTable extends Migration
             $table->double('amount')->nullable();
             $table->dateTime('paid_at')->nullable();
             $table->timestamps();
+            $table->foreign('loan_id')->references('id')->on('loans')->onDelete('cascade');
         });
     }
 
