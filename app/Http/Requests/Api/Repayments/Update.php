@@ -25,8 +25,8 @@ class Update extends FormRequest
     public function rules()
     {
         return [
-            'amount' => 'nullable|numeric',
-            'paid_at' => 'nullable|date',
+            'amount' => 'required|numeric',
+            'paid_at' => 'required|date',
         ];
     }
 

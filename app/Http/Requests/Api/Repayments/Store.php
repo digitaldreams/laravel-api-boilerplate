@@ -26,7 +26,7 @@ class Store extends FormRequest
     {
         return [
             'amount' => 'required|numeric',
-            'paid_at' => 'nullable|date',
+            'paid_at' => 'required|date',
         ];
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -50,5 +51,12 @@ class Loan extends Model
     public function repayments()
     {
         return $this->hasMany(Repayment::class);
+    }
+
+    public function canRepayment($date)
+    {
+        $paidAt = Carbon::parse($date);
+        $repayment = Repayment::where('loan_id', $this->id)->where('paid_at', $paidAt->toDateTimeString())->count();
+        return $repayment >= 1;
     }
 }

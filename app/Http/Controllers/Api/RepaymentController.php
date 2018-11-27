@@ -36,6 +36,13 @@ class RepaymentController extends ApiController
     {
         $model = new Repayment;
         $model->loan_id = $loan->id;
+        $able = $loan->canRepayment($request->get('paid_at'));
+        if ($able) {
+            return $this->response->array([
+                'status' => false,
+                'message' => 'Sorry you can not paid twice a month'
+            ]);
+        }
         $model->fill($request->all());
         if ($model->save()) {
             session()->flash('app_message', 'Repayment saved successfully');
@@ -47,6 +54,13 @@ class RepaymentController extends ApiController
 
     public function update(Update $request, Loan $loan, Repayment $repayment)
     {
+        $able = $loan->canRepayment($request->get('paid_at'));
+        if ($able) {
+            return $this->response->array([
+                'status' => false,
+                'message' => 'Sorry you can not paid twice a month'
+            ]);
+        }
         $repayment->fill($request->all());
         if ($repayment->save()) {
             return $this->response->item($repayment, new RepaymentTransformer());
